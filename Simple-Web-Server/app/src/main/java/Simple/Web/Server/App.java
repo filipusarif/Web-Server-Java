@@ -3,12 +3,18 @@
  */
 package Simple.Web.Server;
 
-public class App {
-    public String getGreeting() {
-        return "Hello World!";
-    }
+import Models.WebServer;
 
+public class App {
     public static void main(String[] args) {
-        System.out.println(new App().getGreeting());
+        WebServer webServer = new WebServer(8081, "D:\\Github\\AboutMe", "D:\\Web\\Logs");
+        webServer.start();
     }
 }
+
+
+
+
+
+// Implement GUI for configuration interface and log view
+
