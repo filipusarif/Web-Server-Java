@@ -61,11 +61,16 @@ class RequestHandler implements HttpHandler {
         } else if (file.exists() && file.isDirectory()) {
             // List files in directory
             File[] files = file.listFiles();
-            String hostLink = "http://localhost:8081"+requestPath;
             StringBuilder response = new StringBuilder();
             response.append("<html><body><h1>Index of ").append(requestPath).append("</h1><ul>");
+            // If requestPath is not root, append a link to go up one level
+            if (!requestPath.equals("/")) {
+                response.append("<li><a href=\"../\">.. (Up one level)</a></li>");
+            }
             for (File f : files) {
-                response.append("<li><a href=\"").append(hostLink).append(f.getName()).append("\">").append(f.getName()).append("</a></li>");
+                // Determine the link path based on whether it's a directory or a file
+                String linkPath = f.isDirectory() ? requestPath + f.getName() + "/" : requestPath + f.getName();
+                response.append("<li><a href=\"").append(linkPath).append("\">").append(f.getName()).append("</a></li>");
             }
             response.append("</ul></body></html>");
             sendResponse(exchange, HttpURLConnection.HTTP_OK, response.toString());
@@ -74,6 +79,7 @@ class RequestHandler implements HttpHandler {
             sendErrorResponse(exchange, HttpURLConnection.HTTP_NOT_FOUND, "Not Found");
         }
     }
+    
 
     private void logAccess(String ipAddress, String requestPath) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
