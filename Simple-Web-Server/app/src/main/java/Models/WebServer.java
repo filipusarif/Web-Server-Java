@@ -18,6 +18,7 @@ public class WebServer {
     private String webDirectory;
     private String logDirectory;
     private HttpServer server;
+    private boolean running;
 
     public WebServer(int port, String webDirectory, String logDirectory) {
         this.port = port;
@@ -27,19 +28,28 @@ public class WebServer {
 
     public void start() {
         try {
-            HttpServer server = HttpServer.create(new InetSocketAddress(port), 0);
+            this.server = HttpServer.create(new InetSocketAddress(port), 0);
             server.createContext("/", new RequestHandler(webDirectory, logDirectory));
             server.setExecutor(Executors.newFixedThreadPool(10));
             server.start();
+            running = true;
             System.out.println("Server started on port " + port);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
     
+    public boolean isRunning() {
+        return running;
+    }
+    
     public void stop(){
         if (server != null) {
             server.stop(0); // Stop the server immediately
+            running = false;
+            System.out.println("Server stop on port " + port);
         }
     }
+    
+    
 }

@@ -61,10 +61,11 @@ class RequestHandler implements HttpHandler {
         } else if (file.exists() && file.isDirectory()) {
             // List files in directory
             File[] files = file.listFiles();
+            String hostLink = "http://localhost:8081"+requestPath;
             StringBuilder response = new StringBuilder();
             response.append("<html><body><h1>Index of ").append(requestPath).append("</h1><ul>");
             for (File f : files) {
-                response.append("<li><a href=\"").append(requestPath).append("/").append(f.getName()).append("\">").append(f.getName()).append("</a></li>");
+                response.append("<li><a href=\"").append(hostLink).append(f.getName()).append("\">").append(f.getName()).append("</a></li>");
             }
             response.append("</ul></body></html>");
             sendResponse(exchange, HttpURLConnection.HTTP_OK, response.toString());
