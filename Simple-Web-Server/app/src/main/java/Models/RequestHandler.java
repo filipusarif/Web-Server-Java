@@ -47,6 +47,10 @@ class RequestHandler implements HttpHandler {
             sendErrorResponse(exchange, HttpURLConnection.HTTP_BAD_METHOD, "Method Not Allowed");
         }
     }
+    
+    public String getIP(HttpExchange exchange){
+        return exchange.getRemoteAddress().getAddress().getHostAddress();
+    }
 
     private void handleGetRequest(HttpExchange exchange, String requestPath) throws IOException {
         Path filePath = Paths.get(webDirectory, requestPath.substring(1));
@@ -65,7 +69,7 @@ class RequestHandler implements HttpHandler {
             response.append("<html><body><h1>Index of ").append(requestPath).append("</h1><ul>");
             // If requestPath is not root, append a link to go up one level
             if (!requestPath.equals("/")) {
-                response.append("<li><a href=\"../\">.. (Up one level)</a></li>");
+                response.append("<li><a href=\"../\">.. (Back)</a></li>");
             }
             for (File f : files) {
                 // Determine the link path based on whether it's a directory or a file
@@ -85,7 +89,7 @@ class RequestHandler implements HttpHandler {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         String logFileName = dateFormat.format(new Date()) + ".log";
         String logFilePath = Paths.get(logDirectory, logFileName).toString();
-
+        
         try {
             File logFile = new File(logFilePath);
             if (!logFile.exists()) {
@@ -94,6 +98,7 @@ class RequestHandler implements HttpHandler {
 
             String logEntry = String.format("[%s] %s - %s\n", new Date(), ipAddress, requestPath);
             Files.write(Paths.get(logFilePath), logEntry.getBytes(), java.nio.file.StandardOpenOption.APPEND);
+            System.out.println(logEntry);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -110,4 +115,3 @@ class RequestHandler implements HttpHandler {
         sendResponse(exchange, statusCode, message);
     }
 }
-

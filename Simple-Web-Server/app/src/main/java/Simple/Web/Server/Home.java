@@ -5,6 +5,18 @@
 package Simple.Web.Server;
 
 import Models.WebServer;
+import com.sun.net.httpserver.HttpExchange;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JScrollBar;
+import javax.swing.SwingUtilities;
 
 /**
  *
@@ -12,12 +24,67 @@ import Models.WebServer;
  */
 public class Home extends javax.swing.JFrame {
     WebServer webServer;
+    private Thread logUpdaterThread;
+    private File logFile;
+    private boolean autoScroll = true;
+    
     /**
      * Creates new form Home
      */
     public Home() {
         initComponents();
+//        jScrollPane3.getVerticalScrollBar().addAdjustmentListener(e -> scrollStatus = true);
+        startLogUpdater();
+        jScrollPane3.getVerticalScrollBar().addAdjustmentListener(e -> {
+            autoScroll = (e.getValue() == jScrollPane3.getVerticalScrollBar().getMinimum());
+        });
+        updateLogText(new Date()+"");
     }
+    
+    private void startLogUpdater() {
+        logUpdaterThread = new Thread(() -> {
+            while (true) {
+                try {
+                    // Lokasi file log
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                    String logFilePath = "D:\\webserver\\logs\\"+ dateFormat.format(new Date()) + ".log";;
+                    logFile = new File(logFilePath);
+
+                    // Membaca teks dari file log
+                    StringBuilder logText = new StringBuilder();
+                    try (BufferedReader reader = new BufferedReader(new FileReader(logFile))) {
+                        String line;
+                        while ((line = reader.readLine()) != null) {
+                            logText.append(line).append("\n");
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                    // Memperbarui JLabel dengan teks dari file log
+                    updateLogText(logText.toString());
+                  
+                    
+                    // Menunggu selama beberapa waktu sebelum memeriksa file log lagi
+                    Thread.sleep(2000); // Anda dapat menyesuaikan interval waktu di sini
+                    
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        logUpdaterThread.start();
+    }
+    
+    private void updateLogText(String text) {
+    SwingUtilities.invokeLater(() -> {
+        logLabel.setText("<html>" + text.replaceAll("\n", "<br>") + "</html>");
+        
+        // Mengatur posisi scroll ke bawah
+//        JScrollBar verticalScrollBar = jScrollPane3.getVerticalScrollBar();
+//        verticalScrollBar.setValue(verticalScrollBar.getMaximum());
+    });
+}
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -30,10 +97,18 @@ public class Home extends javax.swing.JFrame {
 
         ApacheButton = new javax.swing.JButton();
         ApacheLabel = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        logLabel = new javax.swing.JLabel();
+        configBtn = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        inputPort = new javax.swing.JTextField();
+        inputWeb = new javax.swing.JTextField();
+        inputLog = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setPreferredSize(new java.awt.Dimension(650, 400));
 
         ApacheButton.setText("Start");
         ApacheButton.addActionListener(new java.awt.event.ActionListener() {
@@ -44,35 +119,93 @@ public class Home extends javax.swing.JFrame {
 
         ApacheLabel.setText("Web Server");
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane1.setViewportView(jTextArea1);
+        logLabel.setText("Text");
+        logLabel.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+        logLabel.setAutoscrolls(true);
+        logLabel.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
+        jScrollPane3.setViewportView(logLabel);
+
+        configBtn.setText("Config");
+        configBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                configBtnActionPerformed(evt);
+            }
+        });
+
+        jLabel1.setText("Service");
+
+        jLabel2.setText("Module");
+
+        inputPort.setText("Port");
+        inputPort.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                inputPortActionPerformed(evt);
+            }
+        });
+
+        inputWeb.setText("Web Directory");
+
+        inputLog.setText("Log Directory");
+
+        jLabel3.setText("X");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(14, 14, 14)
-                .addComponent(ApacheLabel)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(ApacheButton)
-                .addGap(16, 16, 16))
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 388, Short.MAX_VALUE)
-                .addContainerGap())
+                .addGap(23, 23, 23)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(inputPort, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
+                                        .addComponent(inputWeb, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(12, 12, 12)
+                                        .addComponent(jLabel3)
+                                        .addGap(42, 42, 42)
+                                        .addComponent(ApacheLabel)
+                                        .addGap(0, 0, Short.MAX_VALUE)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(inputLog, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(ApacheButton)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(configBtn)))))
+                        .addGap(16, 16, 16))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addGap(34, 34, 34)
+                        .addComponent(jLabel2)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(45, 45, 45)
+                .addGap(51, 51, 51)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(jLabel2))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(ApacheButton)
-                    .addComponent(ApacheLabel))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 111, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                    .addComponent(configBtn)
+                    .addComponent(ApacheLabel)
+                    .addComponent(jLabel3))
+                .addGap(26, 26, 26)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(inputLog, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(inputWeb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(inputPort, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 141, Short.MAX_VALUE)
+                .addGap(15, 15, 15))
         );
 
         pack();
@@ -89,45 +222,37 @@ public class Home extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_ApacheButtonActionPerformed
 
+    private void configBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_configBtnActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_configBtnActionPerformed
+
+    private void inputPortActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputPortActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_inputPortActionPerformed
+
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Home.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Home.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Home.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Home.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new Home().setVisible(true);
             }
         });
     }
-
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton ApacheButton;
     private javax.swing.JLabel ApacheLabel;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextArea jTextArea1;
+    private javax.swing.JButton configBtn;
+    private javax.swing.JTextField inputLog;
+    private javax.swing.JTextField inputPort;
+    private javax.swing.JTextField inputWeb;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JLabel logLabel;
     // End of variables declaration//GEN-END:variables
+
 }
