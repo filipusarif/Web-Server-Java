@@ -4,15 +4,10 @@
  */
 package Models;
 
-import com.sun.net.httpserver.HttpExchange;
+
 import com.sun.net.httpserver.HttpServer;
-import java.io.File;
 import java.io.IOException;
 import java.net.InetSocketAddress;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.concurrent.Executors;
 import javax.swing.JTextArea;
 
@@ -45,8 +40,10 @@ public class WebServer {
             server.setExecutor(Executors.newFixedThreadPool(10));
             server.start();
             running = true;
-            String logEntry = "Status change detected : server start on port "+port;
-            logHandle.log(textArea,logEntry);
+            String logEntry1 = "Attempting to start Web Server";
+            logHandle.log(textArea,logEntry1);
+            String logEntry2 = "Status change detected : server start at port "+ port;
+            logHandle.log(textArea,logEntry2);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -60,8 +57,10 @@ public class WebServer {
         if (server != null) {
             server.stop(0); // Stop the server immediately
             running = false;
-            String logEntry = "Status change detected : server shutdown on port "+port;
-            logHandle.log(textArea,logEntry);
+            String logEntry1 = "Attempting to shutdown Web Server";
+            logHandle.log(textArea,logEntry1);
+            String logEntry2 = "Status change detected : server off at port "+ port;
+            logHandle.log(textArea,logEntry2);
         }
     }
     
