@@ -63,7 +63,7 @@ class RequestHandler implements HttpHandler {
             outputStream.close();
         } else if (file.exists() && file.isDirectory()) {
             // Cek apakah ada file index.html dalam direktori
-            File indexFile = new File(file, "index.php");
+            File indexFile = new File(file, "index.html");
             if (indexFile.exists() && indexFile.isFile()) {
                 // Mengirim isi content file index.html
                 exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, indexFile.length());
