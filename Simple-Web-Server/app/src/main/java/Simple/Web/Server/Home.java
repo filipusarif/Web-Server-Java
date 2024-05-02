@@ -4,6 +4,7 @@
  */
 package Simple.Web.Server;
 
+import Models.ConfigHandler;
 import Models.WebServer;
 import com.sun.net.httpserver.HttpExchange;
 import java.io.BufferedReader;
@@ -27,6 +28,7 @@ import javax.swing.SwingUtilities;
  */
 public class Home extends javax.swing.JFrame {
     WebServer webServer;
+    
     
     /**
      * Creates new form Home
@@ -159,19 +161,20 @@ public class Home extends javax.swing.JFrame {
 
         String webDir = inputWeb.getText();
         String logDir = inputLog.getText();
-        
         int port = Integer.parseInt(inputPort.getText());
+
+        // Save preferences
+        ConfigHandler.savePreferences(port, webDir, logDir);
+
         if (webServer != null && webServer.isRunning()) {
             webServer.stop();
             ApacheButton.setText("Start");
             serviceLabel.setText("X");
-
         } else {
             webServer = new WebServer(port, webDir, logDir, jTextArea1);
             webServer.start();
             ApacheButton.setText("Stop");
             serviceLabel.setText("✓");
-
         }
     }//GEN-LAST:event_ApacheButtonActionPerformed
 
@@ -186,10 +189,21 @@ public class Home extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 Home home = new Home();
-                new Home().setVisible(true);
+            home.setVisible(true);
+
+            // Load preferences
+            int port = ConfigHandler.getPortPreference();
+            String webDir = ConfigHandler.getWebDirPreference();
+            String logDir = ConfigHandler.getLogDirPreference();
+
+            // Update UI with loaded preferences
+            home.inputPort.setText(String.valueOf(port));
+            home.inputWeb.setText(webDir);
+            home.inputLog.setText(logDir);
             }
         });
     }
+    
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton ApacheButton;

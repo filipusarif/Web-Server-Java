@@ -15,6 +15,12 @@ repositories {
     mavenCentral()
 }
 
+jar{
+    manifest{   
+        attributes 'Main-Class': 'Simple.Web.Server.Home'
+    }   
+}
+
 dependencies {
     // Use JUnit Jupiter for testing.
     testImplementation libs.junit.jupiter
