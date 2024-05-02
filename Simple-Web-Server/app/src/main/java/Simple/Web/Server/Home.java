@@ -11,10 +11,13 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.prefs.Preferences;
 import javax.swing.JScrollBar;
 import javax.swing.SwingUtilities;
 
@@ -33,58 +36,9 @@ public class Home extends javax.swing.JFrame {
      */
     public Home() {
         initComponents();
-//        jScrollPane3.getVerticalScrollBar().addAdjustmentListener(e -> scrollStatus = true);
-        startLogUpdater();
-        jScrollPane3.getVerticalScrollBar().addAdjustmentListener(e -> {
-            autoScroll = (e.getValue() == jScrollPane3.getVerticalScrollBar().getMinimum());
-        });
-        updateLogText(new Date()+"");
     }
     
-    private void startLogUpdater() {
-        logUpdaterThread = new Thread(() -> {
-            while (true) {
-                try {
-                    // Lokasi file log
-                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                    String logFilePath = "D:\\webserver\\logs\\"+ dateFormat.format(new Date()) + ".log";;
-                    logFile = new File(logFilePath);
-
-                    // Membaca teks dari file log
-                    StringBuilder logText = new StringBuilder();
-                    try (BufferedReader reader = new BufferedReader(new FileReader(logFile))) {
-                        String line;
-                        while ((line = reader.readLine()) != null) {
-                            logText.append(line).append("\n");
-                        }
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-
-                    // Memperbarui JLabel dengan teks dari file log
-                    updateLogText(logText.toString());
-                  
-                    
-                    // Menunggu selama beberapa waktu sebelum memeriksa file log lagi
-                    Thread.sleep(2000); // Anda dapat menyesuaikan interval waktu di sini
-                    
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-        logUpdaterThread.start();
-    }
     
-    private void updateLogText(String text) {
-    SwingUtilities.invokeLater(() -> {
-        logLabel.setText("<html>" + text.replaceAll("\n", "<br>") + "</html>");
-        
-        // Mengatur posisi scroll ke bawah
-//        JScrollBar verticalScrollBar = jScrollPane3.getVerticalScrollBar();
-//        verticalScrollBar.setValue(verticalScrollBar.getMaximum());
-    });
-}
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -97,15 +51,15 @@ public class Home extends javax.swing.JFrame {
 
         ApacheButton = new javax.swing.JButton();
         ApacheLabel = new javax.swing.JLabel();
-        jScrollPane3 = new javax.swing.JScrollPane();
-        logLabel = new javax.swing.JLabel();
         configBtn = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         inputPort = new javax.swing.JTextField();
         inputWeb = new javax.swing.JTextField();
         inputLog = new javax.swing.JTextField();
-        jLabel3 = new javax.swing.JLabel();
+        serviceLabel = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTextArea1 = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setPreferredSize(new java.awt.Dimension(650, 400));
@@ -119,12 +73,6 @@ public class Home extends javax.swing.JFrame {
 
         ApacheLabel.setText("Web Server");
 
-        logLabel.setText("Text");
-        logLabel.setVerticalAlignment(javax.swing.SwingConstants.TOP);
-        logLabel.setAutoscrolls(true);
-        logLabel.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
-        jScrollPane3.setViewportView(logLabel);
-
         configBtn.setText("Config");
         configBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -136,18 +84,22 @@ public class Home extends javax.swing.JFrame {
 
         jLabel2.setText("Module");
 
-        inputPort.setText("Port");
+        inputPort.setText("8081");
         inputPort.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 inputPortActionPerformed(evt);
             }
         });
 
-        inputWeb.setText("Web Directory");
+        inputWeb.setText("D://");
 
-        inputLog.setText("Log Directory");
+        inputLog.setText("D://webserver/logs");
 
-        jLabel3.setText("X");
+        serviceLabel.setText("X");
+
+        jTextArea1.setColumns(20);
+        jTextArea1.setRows(5);
+        jScrollPane1.setViewportView(jTextArea1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -157,20 +109,24 @@ public class Home extends javax.swing.JFrame {
                 .addGap(23, 23, 23)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(layout.createSequentialGroup()
-                                        .addComponent(inputPort, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
-                                        .addComponent(inputWeb, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(layout.createSequentialGroup()
                                         .addGap(12, 12, 12)
-                                        .addComponent(jLabel3)
-                                        .addGap(42, 42, 42)
-                                        .addComponent(ApacheLabel)
-                                        .addGap(0, 0, Short.MAX_VALUE)))
+                                        .addComponent(serviceLabel)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(inputPort, javax.swing.GroupLayout.DEFAULT_SIZE, 74, Short.MAX_VALUE)
+                                        .addGap(18, 18, 18)))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(inputWeb, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(ApacheLabel)
+                                    .addComponent(jLabel2))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(inputLog, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -178,12 +134,7 @@ public class Home extends javax.swing.JFrame {
                                         .addComponent(ApacheButton)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(configBtn)))))
-                        .addGap(16, 16, 16))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addGap(34, 34, 34)
-                        .addComponent(jLabel2)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addGap(16, 16, 16))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -197,15 +148,15 @@ public class Home extends javax.swing.JFrame {
                     .addComponent(ApacheButton)
                     .addComponent(configBtn)
                     .addComponent(ApacheLabel)
-                    .addComponent(jLabel3))
+                    .addComponent(serviceLabel))
                 .addGap(26, 26, 26)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(inputLog, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(inputWeb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(inputPort, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 141, Short.MAX_VALUE)
-                .addGap(15, 15, 15))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(16, Short.MAX_VALUE))
         );
 
         pack();
@@ -215,10 +166,14 @@ public class Home extends javax.swing.JFrame {
         if (webServer != null && webServer.isRunning()) {
             webServer.stop();
             ApacheButton.setText("Start");
+            serviceLabel.setText("X");
+
         } else {
-            webServer = new WebServer(8081, "D:\\", "D:\\webserver\\logs");
+            webServer = new WebServer(8081, "D:\\", "D:\\webserver\\logs", jTextArea1);
             webServer.start();
             ApacheButton.setText("Stop");
+            serviceLabel.setText("✓");
+
         }
     }//GEN-LAST:event_ApacheButtonActionPerformed
 
@@ -236,6 +191,15 @@ public class Home extends javax.swing.JFrame {
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
+                Home home = new Home();
+                // Membaca nilai dari Java Preferences
+                Preferences prefs = Preferences.userNodeForPackage(Home.class);
+                int port = prefs.getInt("port", 8080); // Port default 8080 jika tidak ada
+                String inputWeb = prefs.get("inputWeb", "");
+                String inputLog = prefs.get("inputLog", "");
+                home.inputPort.setText(Integer.toString(port));
+                home.inputWeb.setText(inputWeb);
+                home.inputLog.setText(inputLog);
                 new Home().setVisible(true);
             }
         });
@@ -250,9 +214,9 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JTextField inputWeb;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JLabel logLabel;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTextArea jTextArea1;
+    private javax.swing.JLabel serviceLabel;
     // End of variables declaration//GEN-END:variables
 
 }

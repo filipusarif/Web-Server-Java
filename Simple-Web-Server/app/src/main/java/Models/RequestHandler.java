@@ -21,14 +21,19 @@ import java.util.Date;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
+import javax.swing.JTextArea;
 
 class RequestHandler implements HttpHandler {
     private String webDirectory;
     private String logDirectory;
+    private JTextArea textArea;
+    private LogHandler logHandle;
 
-    public RequestHandler(String webDirectory, String logDirectory) {
+    public RequestHandler(String webDirectory, String logDirectory, JTextArea textArea) {
         this.webDirectory = webDirectory;
         this.logDirectory = logDirectory;
+        this.textArea = textArea;
+        this.logHandle = new LogHandler(logDirectory);
     }
 
     @Override
@@ -37,7 +42,9 @@ class RequestHandler implements HttpHandler {
         String requestPath = exchange.getRequestURI().getPath();
 
         // Log access
-        logAccess(exchange.getRemoteAddress().getAddress().getHostAddress(), requestPath);
+//        logAccess(exchange.getRemoteAddress().getAddress().getHostAddress(), requestPath);
+        logHandle.log(textArea, requestPath, exchange.getRemoteAddress().getAddress().getHostAddress());
+        
 
         // Handle GET requests
         if (requestMethod.equalsIgnoreCase("GET")) {
@@ -86,22 +93,22 @@ class RequestHandler implements HttpHandler {
     
 
     private void logAccess(String ipAddress, String requestPath) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        String logFileName = dateFormat.format(new Date()) + ".log";
-        String logFilePath = Paths.get(logDirectory, logFileName).toString();
-        
-        try {
-            File logFile = new File(logFilePath);
-            if (!logFile.exists()) {
-                logFile.createNewFile();
-            }
-
-            String logEntry = String.format("[%s] %s - %s\n", new Date(), ipAddress, requestPath);
-            Files.write(Paths.get(logFilePath), logEntry.getBytes(), java.nio.file.StandardOpenOption.APPEND);
-            System.out.println(logEntry);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+//        String logFileName = dateFormat.format(new Date()) + ".log";
+//        String logFilePath = Paths.get(logDirectory, logFileName).toString();
+//        
+//        try {
+//            File logFile = new File(logFilePath);
+//            if (!logFile.exists()) {
+//                logFile.createNewFile();
+//            }
+//
+//            String logEntry = String.format("[%s] %s - %s\n", new Date(), ipAddress, requestPath);
+//            Files.write(Paths.get(logFilePath), logEntry.getBytes(), java.nio.file.StandardOpenOption.APPEND);
+//            System.out.println(logEntry);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
     }
 
     private void sendResponse(HttpExchange exchange, int statusCode, String response) throws IOException {

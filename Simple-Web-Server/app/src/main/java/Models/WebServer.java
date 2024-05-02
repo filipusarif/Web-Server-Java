@@ -14,6 +14,7 @@ import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.Executors;
+import javax.swing.JTextArea;
 
 
 /**
@@ -26,34 +27,26 @@ public class WebServer {
     private String logDirectory;
     private HttpServer server;
     private boolean running;
+    private JTextArea textArea;
+    private LogHandler logHandle;
 
-    public WebServer(int port, String webDirectory, String logDirectory) {
+    public WebServer(int port, String webDirectory, String logDirectory, JTextArea textArea) {
         this.port = port;
         this.webDirectory = webDirectory;
         this.logDirectory = logDirectory;
+        this.textArea = textArea;
+        this.logHandle = new LogHandler(logDirectory);
     }
 
     public void start() {
         try {
             this.server = HttpServer.create(new InetSocketAddress(port), 0);
-            server.createContext("/", new RequestHandler(webDirectory, logDirectory));
+            server.createContext("/", new RequestHandler(webDirectory, logDirectory,textArea));
             server.setExecutor(Executors.newFixedThreadPool(10));
             server.start();
             running = true;
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-            String logFileName = dateFormat.format(new Date()) + ".log";
-            String logFilePath = Paths.get(logDirectory, logFileName).toString();
-            try {
-            File logFile = new File(logFilePath);
-                if (!logFile.exists()) {
-                    logFile.createNewFile();
-                }
-                String logEntry = String.format("[%s] %s - %s\n", new Date(),":0:0:0:0:0:0:1", "Status change detected : server start on port "+port);
-                Files.write(Paths.get(logFilePath), logEntry.getBytes(), java.nio.file.StandardOpenOption.APPEND);
-                System.out.println(logEntry);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            String logEntry = "Status change detected : server start on port "+port;
+            logHandle.log(textArea,logEntry);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -67,21 +60,8 @@ public class WebServer {
         if (server != null) {
             server.stop(0); // Stop the server immediately
             running = false;
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-            String logFileName = dateFormat.format(new Date()) + ".log";
-            String logFilePath = Paths.get(logDirectory, logFileName).toString();
-            try {
-            File logFile = new File(logFilePath);
-                if (!logFile.exists()) {
-                    logFile.createNewFile();
-                }
-
-                String logEntry = String.format("[%s] %s - %s\n", new Date(),"192.168.1.1", "Status change detected : server shutdown on port "+port);
-                Files.write(Paths.get(logFilePath), logEntry.getBytes(), java.nio.file.StandardOpenOption.APPEND);
-                System.out.println(logEntry);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            String logEntry = "Status change detected : server shutdown on port "+port;
+            logHandle.log(textArea,logEntry);
         }
     }
     

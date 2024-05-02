@@ -7,8 +7,8 @@ import Models.WebServer;
 
 public class App {
     public static void main(String[] args) {
-        WebServer webServer = new WebServer(8081, "D:\\Github\\AboutMe", "D:\\Web\\Logs");
-        webServer.start();
+//        WebServer webServer = new WebServer(8081, "D:\\Github\\AboutMe", "D:\\Web\\Logs");
+//        webServer.start();
     }
 }
 
