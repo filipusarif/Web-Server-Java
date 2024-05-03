@@ -196,7 +196,7 @@ public class Home extends javax.swing.JFrame {
             String webDir = ConfigHandler.getWebDirPreference();
             String logDir = ConfigHandler.getLogDirPreference();
 
-            // Update UI with loaded preferences
+            // Update UI dengan hasil load preferences
             home.inputPort.setText(String.valueOf(port));
             home.inputWeb.setText(webDir);
             home.inputLog.setText(logDir);

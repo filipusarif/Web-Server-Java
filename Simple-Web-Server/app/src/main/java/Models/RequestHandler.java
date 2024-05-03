@@ -26,6 +26,7 @@ class RequestHandler implements HttpHandler {
     private JTextArea textArea;
     private LogHandler logHandle;
 
+//    Constructor
     public RequestHandler(String webDirectory, String logDirectory, JTextArea textArea) {
         this.webDirectory = webDirectory;
         this.logDirectory = logDirectory;
