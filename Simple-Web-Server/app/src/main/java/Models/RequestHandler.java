@@ -47,7 +47,7 @@ class RequestHandler implements HttpHandler {
         if (requestMethod.equalsIgnoreCase("GET")) {
             handleGetRequest(exchange, requestPath);
         } else {
-            // Handle request method lain (POST, PUT, etc.)
+            // Handle request method lain (POST, PUT, dll)
             sendErrorResponse(exchange, HttpURLConnection.HTTP_BAD_METHOD, "Method Not Allowed");
         }
     }

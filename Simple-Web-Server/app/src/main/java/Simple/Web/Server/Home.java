@@ -48,113 +48,122 @@ public class Home extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        ApacheButton = new javax.swing.JButton();
-        ApacheLabel = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
         inputPort = new javax.swing.JTextField();
+        ApacheButton = new javax.swing.JButton();
         inputWeb = new javax.swing.JTextField();
         inputLog = new javax.swing.JTextField();
         serviceLabel = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
-        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(650, 400));
+        setTitle("FilpWS");
+        setResizable(false);
 
-        ApacheButton.setText("Start");
-        ApacheButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ApacheButtonActionPerformed(evt);
-            }
-        });
-
-        ApacheLabel.setText("Web Server");
-
-        jLabel1.setText("Service");
-
-        jLabel2.setText("Module");
-
+        inputPort.setBackground(new java.awt.Color(225, 225, 225));
+        inputPort.setFont(new java.awt.Font("JetBrains Mono", 1, 12)); // NOI18N
+        inputPort.setForeground(new java.awt.Color(102, 102, 102));
         inputPort.setText("8080");
+        inputPort.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(120, 120, 120), 1, true));
         inputPort.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 inputPortActionPerformed(evt);
             }
         });
 
+        ApacheButton.setBackground(new java.awt.Color(66, 142, 255));
+        ApacheButton.setFont(new java.awt.Font("Raleway ExtraBold", 0, 12)); // NOI18N
+        ApacheButton.setForeground(new java.awt.Color(255, 255, 255));
+        ApacheButton.setText("Start");
+        ApacheButton.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(66, 142, 255), 10, true));
+        ApacheButton.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        ApacheButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ApacheButtonActionPerformed(evt);
+            }
+        });
+
+        inputWeb.setBackground(new java.awt.Color(225, 225, 225));
+        inputWeb.setFont(new java.awt.Font("JetBrains Mono", 1, 12)); // NOI18N
+        inputWeb.setForeground(new java.awt.Color(102, 102, 102));
         inputWeb.setText("D://");
+        inputWeb.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(120, 120, 120), 1, true));
+        inputWeb.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                inputWebActionPerformed(evt);
+            }
+        });
 
-        inputLog.setText("D://webserver/logs");
+        inputLog.setBackground(new java.awt.Color(225, 225, 225));
+        inputLog.setFont(new java.awt.Font("JetBrains Mono", 1, 12)); // NOI18N
+        inputLog.setForeground(new java.awt.Color(102, 102, 102));
+        inputLog.setText("D://");
+        inputLog.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(120, 120, 120), 1, true));
+        inputLog.setOpaque(true);
+        inputLog.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                inputLogActionPerformed(evt);
+            }
+        });
 
+        serviceLabel.setForeground(new java.awt.Color(102, 102, 102));
+        serviceLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         serviceLabel.setText("X");
 
+        jTextArea1.setEditable(false);
+        jTextArea1.setBackground(new java.awt.Color(225, 225, 225));
         jTextArea1.setColumns(20);
+        jTextArea1.setFont(new java.awt.Font("JetBrains Mono", 1, 12)); // NOI18N
         jTextArea1.setRows(5);
+        jTextArea1.setCaretColor(new java.awt.Color(225, 225, 225));
+        jTextArea1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        jTextArea1.setDisabledTextColor(new java.awt.Color(153, 153, 153));
         jScrollPane1.setViewportView(jTextArea1);
 
-        jLabel3.setText("SimpleWebs");
+        jLabel4.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/homeFrame.png"))); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(23, 23, 23)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel3)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGap(12, 12, 12)
-                                        .addComponent(serviceLabel)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(inputPort, javax.swing.GroupLayout.DEFAULT_SIZE, 74, Short.MAX_VALUE)
-                                        .addGap(18, 18, 18)))
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(inputWeb, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(ApacheLabel)
-                                    .addComponent(jLabel2))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(inputLog, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(ApacheButton))))
-                        .addGap(16, 16, 16))))
+                .addGap(47, 47, 47)
+                .addComponent(serviceLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(462, 462, 462)
+                .addComponent(ApacheButton, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(31, 31, 31)
+                .addComponent(inputPort, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(inputWeb, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(inputLog, javax.swing.GroupLayout.PREFERRED_SIZE, 231, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addComponent(jLabel4)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(15, 15, 15)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 619, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jLabel4)
             .addGroup(layout.createSequentialGroup()
-                .addGap(23, 23, 23)
-                .addComponent(jLabel3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel2))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(ApacheButton)
-                    .addComponent(ApacheLabel)
-                    .addComponent(serviceLabel))
+                .addGap(110, 110, 110)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(ApacheButton, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(serviceLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(26, 26, 26)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(inputLog, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(inputWeb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(inputPort, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE)
-                .addContainerGap())
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(inputPort, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(inputWeb, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(inputLog, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(46, 46, 46)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void ApacheButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ApacheButtonActionPerformed
@@ -182,6 +191,14 @@ public class Home extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_inputPortActionPerformed
 
+    private void inputWebActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputWebActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_inputWebActionPerformed
+
+    private void inputLogActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputLogActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_inputLogActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -207,13 +224,10 @@ public class Home extends javax.swing.JFrame {
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton ApacheButton;
-    private javax.swing.JLabel ApacheLabel;
     private javax.swing.JTextField inputLog;
     private javax.swing.JTextField inputPort;
     private javax.swing.JTextField inputWeb;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextArea jTextArea1;
     private javax.swing.JLabel serviceLabel;

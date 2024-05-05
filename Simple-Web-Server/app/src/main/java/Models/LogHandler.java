@@ -70,13 +70,13 @@ public class LogHandler {
         }
     }
     private void scrollToBottom(JTextArea textArea) {
-        // Get the scroll pane that contains the text area
+        // Mendapatkan scroll pane pada container text area
         JScrollPane scrollPane = (JScrollPane) textArea.getParent().getParent();
         
-        // Get the vertical scroll bar
+        // scrollbar vertikal
         JScrollBar verticalScrollBar = scrollPane.getVerticalScrollBar();
         
-        // Set the value of the vertical scroll bar to its maximum
+        // set nilai vertikal scroll 
         verticalScrollBar.setValue(verticalScrollBar.getMaximum());
     }
     
