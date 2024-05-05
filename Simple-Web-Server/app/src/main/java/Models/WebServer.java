@@ -55,7 +55,7 @@ public class WebServer {
     
     public void stop(){
         if (server != null) {
-            server.stop(0); // Stop the server immediately
+            server.stop(0); // Stop server
             running = false;
             String logEntry1 = "Attempting to shutdown Web Server";
             logHandle.log(textArea,logEntry1);

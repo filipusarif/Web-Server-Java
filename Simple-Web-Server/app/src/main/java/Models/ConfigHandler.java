@@ -27,18 +27,18 @@ public class ConfigHandler {
 //    Mendapatkan Nilai Port
     public static int getPortPreference() {
         Preferences prefs = Preferences.userNodeForPackage(ConfigHandler.class);
-        return prefs.getInt(PORT_KEY, 8080); // Default port is 8080
+        return prefs.getInt(PORT_KEY, 8080); // Default port 8080
     }
     
 //    Mendapatkan Nilai Web Directory
     public static String getWebDirPreference() {
         Preferences prefs = Preferences.userNodeForPackage(ConfigHandler.class);
-        return prefs.get(WEB_DIR_KEY, "D://"); // Default web directory is D://
+        return prefs.get(WEB_DIR_KEY, "D://"); // Default web directory D://
     }
     
 //    Mendapatkan Nilai Log Directory
     public static String getLogDirPreference() {
         Preferences prefs = Preferences.userNodeForPackage(ConfigHandler.class);
-        return prefs.get(LOG_DIR_KEY, "D://webserver/logs"); // Default log directory is D://webserver/logs
+        return prefs.get(LOG_DIR_KEY, "D://"); // Default log directory D://
     }
 }
